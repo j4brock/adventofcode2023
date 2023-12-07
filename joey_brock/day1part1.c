@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
-double getTwoDigitNumber(char inLine[], int numChars) {
+int getTwoDigitNumber(char inLine[], int numChars) {
     int num1 = -1;
     int num2 = -1;
     for (int idx = 0; idx < numChars; idx++) {
