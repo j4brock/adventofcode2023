@@ -8,7 +8,8 @@ int main() {
     int numChars = 140;
     int solution = 0;
     FILE *fileptr;
-    fileptr = fopen("C:\\Users\\Joey\\Desktop\\advent_of_code_2023_files\\day3_input.txt", "r");
+    //fileptr = fopen("C:\\Users\\Joey\\Desktop\\advent_of_code_2023_files\\day3_input.txt", "r");
+    fileptr = fopen("C:\\Users\\brockjp1\\Desktop\\test.txt", "r");
     char inLine[numChars];
 
     char schematic[numLines][numChars];
@@ -38,14 +39,14 @@ int main() {
                 // we have a symbol!
                 // first check to the left:
                 if (k > 0) {
-                    if (isdigit(schematic[i][k-1] > 0)) {
+                    if (isdigit(schematic[i][k-1]) > 0) {
                         kEnd = k-1;
                         kStart = k-1;
                         while(isdigit(schematic[i][kStart]) > 0 && kStart >= 0) {
                             kStart--;
                         }
                         multiplier = 0;
-                        for (int kTemp = kEnd; kTemp >= kStart; kTemp--) {
+                        for (int kTemp = kEnd; kTemp > kStart; kTemp--) {
                             tempNum = tempNum + (pow(10.0, multiplier))*(schematic[i][kTemp] - '0');
                             multiplier++;
                             schematic[i][kTemp] = '.'; // don't want to double count
@@ -58,14 +59,14 @@ int main() {
 
                 // now let's check to the right
                 if (k < numChars - 1) {
-                    if (isdigit(schematic[i][k+1] > 0)) {
+                    if (isdigit(schematic[i][k+1]) > 0) {
                         kEnd = k+1;
                         kStart = k+1;
                         while(isdigit(schematic[i][kEnd]) > 0 && kEnd < numChars) {
                             kEnd++;
                         }
                         multiplier = 0;
-                        for (int kTemp = kEnd; kTemp >= kStart; kTemp--) {
+                        for (int kTemp = kEnd - 1; kTemp >= kStart; kTemp--) {
                             tempNum = tempNum + (pow(10.0, multiplier))*(schematic[i][kTemp] - '0');
                             multiplier++;
                             schematic[i][kTemp] = '.'; // don't want to double count
@@ -78,7 +79,7 @@ int main() {
 
                 // now check up
                 if (i > 0) {
-                    if (isdigit(schematic[i - 1][k] > 0)) {
+                    if (isdigit(schematic[i - 1][k]) > 0) {
                         kStart = k;
                         kEnd = k;
                         while(isdigit(schematic[i - 1][kStart]) > 0 && kStart >= 0) {
@@ -88,7 +89,7 @@ int main() {
                             kEnd++;
                         }
                         multiplier = 0;
-                        for (int kTemp = kEnd; kTemp >= kStart; kTemp--) {
+                        for (int kTemp = kEnd - 1; kTemp > kStart; kTemp--) {
                             tempNum = tempNum + (pow(10.0, multiplier))*(schematic[i - 1][kTemp] - '0');
                             multiplier++;
                             schematic[i - 1][kTemp] = '.'; // don't want to double count
@@ -99,7 +100,7 @@ int main() {
 
                     // now check up left
                     if (k > 0){
-                        if (isdigit(schematic[i - 1][k - 1] > 0)) {
+                        if (isdigit(schematic[i - 1][k - 1]) > 0) {
                             kStart = k - 1;
                             kEnd = k - 1;
                             while(isdigit(schematic[i - 1][kStart]) > 0 && kStart >= 0) {
@@ -109,7 +110,7 @@ int main() {
                                 kEnd++;
                             }
                             multiplier = 0;
-                            for (int kTemp = kEnd; kTemp >= kStart; kTemp--) {
+                            for (int kTemp = kEnd - 1; kTemp > kStart; kTemp--) {
                                 tempNum = tempNum + (pow(10.0, multiplier))*(schematic[i - 1][kTemp] - '0');
                                 multiplier++;
                                 schematic[i - 1][kTemp] = '.'; // don't want to double count
@@ -121,7 +122,7 @@ int main() {
 
                     // now check up right
                     if (k < numChars - 1){
-                        if (isdigit(schematic[i - 1][k + 1] > 0)) {
+                        if (isdigit(schematic[i - 1][k + 1]) > 0) {
                             kStart = k + 1;
                             kEnd = k + 1;
                             while(isdigit(schematic[i - 1][kStart]) > 0 && kStart >= 0) {
@@ -131,7 +132,7 @@ int main() {
                                 kEnd++;
                             }
                             multiplier = 0;
-                            for (int kTemp = kEnd; kTemp >= kStart; kTemp--) {
+                            for (int kTemp = kEnd - 1; kTemp > kStart; kTemp--) {
                                 tempNum = tempNum + (pow(10.0, multiplier))*(schematic[i - 1][kTemp] - '0');
                                 multiplier++;
                                 schematic[i - 1][kTemp] = '.'; // don't want to double count
@@ -144,7 +145,7 @@ int main() {
 
                 // now check down
                 if (i < (numLines - 1)) {
-                    if (isdigit(schematic[i + 1][k] > 0)) {
+                    if (isdigit(schematic[i + 1][k]) > 0) {
                         kStart = k;
                         kEnd = k;
                         while(isdigit(schematic[i + 1][kStart]) > 0 && kStart >= 0) {
@@ -154,7 +155,7 @@ int main() {
                             kEnd++;
                         }
                         multiplier = 0;
-                        for (int kTemp = kEnd; kTemp >= kStart; kTemp--) {
+                        for (int kTemp = kEnd - 1; kTemp > kStart; kTemp--) {
                             tempNum = tempNum + (pow(10.0, multiplier))*(schematic[i + 1][kTemp] - '0');
                             multiplier++;
                             schematic[i + 1][kTemp] = '.'; // don't want to double count
@@ -165,7 +166,7 @@ int main() {
 
                     // now check down left
                     if (k > 0){
-                        if (isdigit(schematic[i + 1][k - 1] > 0)) {
+                        if (isdigit(schematic[i + 1][k - 1]) > 0) {
                             kStart = k - 1;
                             kEnd = k - 1;
                             while(isdigit(schematic[i + 1][kStart]) > 0 && kStart >= 0) {
@@ -175,7 +176,7 @@ int main() {
                                 kEnd++;
                             }
                             multiplier = 0;
-                            for (int kTemp = kEnd; kTemp >= kStart; kTemp--) {
+                            for (int kTemp = kEnd - 1; kTemp > kStart; kTemp--) {
                                 tempNum = tempNum + (pow(10.0, multiplier))*(schematic[i + 1][kTemp] - '0');
                                 multiplier++;
                                 schematic[i + 1][kTemp] = '.'; // don't want to double count
@@ -187,7 +188,7 @@ int main() {
 
                     // now check down right
                     if (k < numChars - 1){
-                        if (isdigit(schematic[i + 1][k + 1] > 0)) {
+                        if (isdigit(schematic[i + 1][k + 1]) > 0) {
                             kStart = k + 1;
                             kEnd = k + 1;
                             while(isdigit(schematic[i + 1][kStart]) > 0 && kStart >= 0) {
@@ -197,7 +198,7 @@ int main() {
                                 kEnd++;
                             }
                             multiplier = 0;
-                            for (int kTemp = kEnd; kTemp >= kStart; kTemp--) {
+                            for (int kTemp = kEnd - 1; kTemp > kStart; kTemp--) {
                                 tempNum = tempNum + (pow(10.0, multiplier))*(schematic[i + 1][kTemp] - '0');
                                 multiplier++;
                                 schematic[i + 1][kTemp] = '.'; // don't want to double count
