@@ -10,7 +10,7 @@ int main() {
     int numLines = 202;
     char inLine[numChars + 2];
 
-    // Loop through the lines, adding up the solution numbers
+    // Loop through the lines of file
     while (fgets(inLine, numChars, fileptr)) {
 
     }
