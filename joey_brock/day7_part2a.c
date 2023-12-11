@@ -6,6 +6,7 @@
 
 #define HAND_SIZE 5
 #define NUM_CARDS 13
+#define NUM_HANDS 1000
 
 enum HandType {
     HIGH_CARD,
@@ -16,6 +17,25 @@ enum HandType {
     FOUR_KIND,
     FIVE_KIND
 };
+
+enum HandType increaseFromJoker(enum HandType hand) {
+    switch (hand) {
+        case HIGH_CARD:
+            return ONE_PAIR;
+        case ONE_PAIR:
+            return THREE_KIND;
+        case TWO_PAIR:
+            return FULL_HOUSE;
+        case THREE_KIND:
+            return FOUR_KIND;
+        case FULL_HOUSE:
+            return FOUR_KIND;
+        case FOUR_KIND:
+            return FIVE_KIND;
+        default:
+            return 0;
+    }
+}
 
 int convertCardToNum(char card) {
     int num;
@@ -43,11 +63,13 @@ int convertCardToNum(char card) {
 
 enum HandType getHandType(const char * hand) {
     int cards[NUM_CARDS] = {0};
-    int num;
+    int num, numJokers = 0;
     for (int i = 0; i < HAND_SIZE; i++) {
         num = convertCardToNum(*(hand + i)) - 2;
         if (num >= 0) {
             cards[num]++;
+        } else {
+            numJokers++;
         }
     }
 
@@ -72,21 +94,28 @@ enum HandType getHandType(const char * hand) {
         }
     }
 
-    if (is5) {
+    enum HandType handType;
+
+    if (is5 || numJokers >= 4) {
         return FIVE_KIND;
     } else if (is4) {
-        return FOUR_KIND;
+        handType = FOUR_KIND;
     } else if (is3 && is2) {
-        return FULL_HOUSE;
+        handType = FULL_HOUSE;
     } else if (is3) {
-        return THREE_KIND;
+        handType = THREE_KIND;
     } else if (is2 && numPairs == 2) {
-        return TWO_PAIR;
+        handType = TWO_PAIR;
     } else if (is2 && numPairs == 1) {
-        return ONE_PAIR;
+        handType = ONE_PAIR;
     } else {
-        return HIGH_CARD;
+        handType = HIGH_CARD;
     }
+    
+    for (int i = 0; i < numJokers; i++) {
+        handType = increaseFromJoker(handType);
+    }
+    return handType;
 
 }
 
@@ -128,8 +157,7 @@ int main() {
     char inLine[numChars];
     char hand[HAND_SIZE];
     enum HandType currHand;
-    int numHands = 1000;
-    char allHands[numHands][numChars];
+    char allHands[NUM_HANDS][numChars];
     int handNum = 0;
 
     // Loop through the lines of file
@@ -138,9 +166,9 @@ int main() {
         handNum++;
     }
 
-    qsort(allHands, numHands, sizeof(allHands[0]), compareHands);
+    qsort(allHands, NUM_HANDS, sizeof(allHands[0]), compareHands);
 
-    for (int i = 0; i < numHands; i++) {
+    for (int i = 0; i < NUM_HANDS; i++) {
         strtok(allHands[i], " ");
         int bid = strtoll(strtok(NULL, " "), NULL, 10); 
         int rank = i + 1;
