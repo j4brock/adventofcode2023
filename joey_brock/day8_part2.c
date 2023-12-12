@@ -5,6 +5,8 @@
 
 #define MAP_SIZE 17576
 
+// Don't look at this, it's garbage.
+
 long long convertCharsToIdx(char * chars) {
     long long digits[3];
     for (int i = 0; i < 3; i++) {
@@ -35,7 +37,7 @@ int main() {
     // Set up vars and file stuff
     int solution = 0;
     FILE *fileptr;
-    fileptr = fopen("C:\\Users\\Joey\\Desktop\\advent_of_code_2023_files\\day8_input.txt", "r");
+    fileptr = fopen("C:\\Users\\brockjp1\\Desktop\\day8_input.txt", "r");
     int numLRChars = 265;
     int numDirChars = 20;
     int numDirLines = 770;
@@ -61,6 +63,7 @@ int main() {
             map[mapIdx][1] = rightIdx;
         }
     }
+
     char testing[4];
     long long maxStartingPositions = 26*26;
     long long actualStartingPositions = 0;
@@ -82,42 +85,46 @@ int main() {
     int leftOrRight;
 
     printf("Starting search...\n");
-    while (1) {
-        switch (lrLine[currLRIdx]) {
-            case 'L':
-                leftOrRight = 0;
-                break;
-            case 'R':
-                leftOrRight = 1;
-                break;
-            case '\n':
-                currLRIdx = 0;
-                continue;
-            default:
-                // Shouldn't get here
-        }
+    int numToGetToZ[actualStartingPositions];
+    int numToGetBackToZ[actualStartingPositions];
+    for (int i = 0; i < actualStartingPositions; i++) {
+        printf("Iteration: %d\n", i);
+        numToGetToZ[i] = 0;
+        numToGetBackToZ[i] = 0;
+        currLRIdx = 0;
+        int foundZ = 0;
+        int steps = 0;
+        while (!numToGetToZ[i] || !numToGetBackToZ[i]) {
+            if (*(currIdx + i) % 26 == 25) {
+                if (foundZ) {
+                    numToGetBackToZ[i] = steps;
+                } else {
+                    numToGetToZ[i] = steps;
+                    steps = 0;
+                    foundZ = 1;                
+                }
+            }
+            switch (lrLine[currLRIdx]) {
+                case 'L':
+                    leftOrRight = 0;
+                    break;
+                case 'R':
+                    leftOrRight = 1;
+                    break;
+                case '\n':
+                    currLRIdx = 0;
+                    continue;
+                default:
+                    // Shouldn't get here
+            }
 
-        int allDone = 1;
-        int allZeros = 1;
-        long long doneIdx = convertCharsToIdx("ZZZ");
-        long long startIdx = 0;
-        for (int i = 0; i < actualStartingPositions; i++) {
-            //convertIdxToChar(*(currIdx + i), testing);
-            //printf("%d: %s   ", i, testing);
             *(currIdx + i) = map[*(currIdx + i)][leftOrRight];
-            allDone = allDone && (*(currIdx + i) == doneIdx);
-            allZeros = allZeros && (*(currIdx + i) == 0);
+            
+            currLRIdx++;
+            steps++;
         }
-        if (allDone) {
-            printf("DONE\n");
-            break;
-        } else if (allZeros || *currIdx == 0) {
-            printf("You're in a loop!\n");
-            break;
-        }
-        currLRIdx++;
-        solution++;
     }
+
     free(currIdx);
     printf("Solution is %d\n", solution);
 
