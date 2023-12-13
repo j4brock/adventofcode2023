@@ -24,7 +24,7 @@ int main() {
     // Set up vars and file stuff
     int solution = 0;
     FILE *fileptr;
-    fileptr = fopen("C:\\Users\\Joey\\Desktop\\advent_of_code_2023_files\\day9_test.txt", "r");
+    fileptr = fopen("C:\\Users\\Joey\\Desktop\\advent_of_code_2023_files\\day9_input.txt", "r");
     int numChars = 140;
     int numLines = 200;
     char inLine[numChars];
@@ -47,7 +47,7 @@ int main() {
             numEntries++;
         }
         long long * lastEntry = calloc(numLevels, sizeof(long long));
-        *lastEntry = currLine[numEntries - 1];
+        *lastEntry = currLine[0];
         while (1) {
             long long * diffTemp = calloc(numEntries - 1, sizeof(long long));
             getDiff(currLine, numEntries, diffTemp);
@@ -55,16 +55,16 @@ int main() {
             if (checkDiff(diffTemp, numEntries)) {
                 // Loop through numLevels, adding up
                 long long tempSolution = 0;
-                for (int i = 0; i < numLevels; i++) {
-                    tempSolution = *(lastEntry + i);
-                    solution += tempSolution;
+                for (int i = numLevels; i > 0 ; i--) {
+                    tempSolution = *(lastEntry + i - 1) - tempSolution;
                 }
+                solution += tempSolution;
                 free(diffTemp);
                 break;
             } else {
                 numLevels++;
                 lastEntry = realloc(lastEntry, numLevels * sizeof(long long));
-                *(lastEntry + numLevels - 1) = *(diffTemp + numEntries - 1);
+                *(lastEntry + numLevels - 1) = *(diffTemp);
                 memcpy(currLine, diffTemp, numEntries*sizeof(long long));
             }
             free(diffTemp);
