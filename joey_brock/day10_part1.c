@@ -10,6 +10,24 @@ enum Direction {
     RIGHT
 };
 
+enum Direction getNextDirection(enum Direction fromDir, char currSymbol) {
+    switch (currSymbol) {
+        case '-':
+            return (fromDir == LEFT)? RIGHT : LEFT;
+        case '|':
+            return (fromDir == UP)? DOWN : UP;
+        case 'L':
+            return (fromDir == UP)? RIGHT : UP;
+        case 'J':
+            return (fromDir == LEFT)? UP : LEFT;
+        case '7':
+            return (fromDir == LEFT)? DOWN : LEFT;
+        case 'F':
+            return (fromDir == RIGHT)? DOWN : RIGHT;
+
+    }
+}
+
 enum Direction getOppositionDirection(enum Direction dir) {
     switch (dir) {
         case UP:
@@ -99,6 +117,7 @@ int main() {
             int currCol = startCol;
             int result;
             while (1) {
+                printf("%d, %d\n", currRow, currCol);
                 result = checkDirection(currDirection, map[currRow + currRowMod][currCol + currColMod]);
                 if (result == -1) {
                     break;
@@ -107,17 +126,21 @@ int main() {
                     currRow += currRowMod;
                     currCol += currColMod;
                     enum Direction oppDirection = getOppositionDirection(currDirection);
-                    for (int i = 0; i < 4; i++) {
-                        if(checkDirection(i, map[currRow + rowMod[i]][currCol + colMod[i]]) == 1 && oppDirection != i) {
-                            currDirection = i;
-                            break;
-                        }
-                    }
+                    currDirection = getNextDirection(oppDirection, map[currRow][currCol]);
+                    currRowMod = rowMod[currDirection];
+                    currColMod = colMod[currDirection];
                 }
             }
         }
     }
 
+    for (int i = 0; i < 4; i++) {
+        if (startingPathsValid[i]) {
+            solution = (pathLengths[i] + 1)/2;
+            break;
+        }
+    }
+    
     printf("Solution is %d\n", solution);
 
     // Clean up
