@@ -12,7 +12,7 @@ class Node;
 
 map<string, Node*> nodes;
 
-void getNode(const string nodeName, Node* node);
+void getNode(const string nodeName, Node& node);
 
 // Recursive function to return gcd of a and b  
 long long gcd(long long int a, long long int b) 
@@ -79,32 +79,34 @@ int main(){
     vector<Node*> startingNodes;
 
     while( getline(inputFile, input)){
-        cout << input << endl;
-        string curNodeStr = input.substr(0,3);
-        string leftNodeStr = input.substr(7,3);
-        string rightNodeStr = input.substr(12,3);
-
-        curNode = new Node(curNodeStr);
-        leftNode = new Node(leftNodeStr);
-        rightNode = new Node(rightNodeStr);
-
-        if (nodes.find(curNodeStr) != nodes.end()){
-            curNode =  nodes[curNodeStr]; 
-        } else {
-            nodes[curNodeStr] = curNode;
-        }
-        if (nodes.find(leftNodeStr) != nodes.end()){
-            leftNode =  nodes[leftNodeStr]; 
-        } else {
-            nodes[leftNodeStr] = leftNode;
-        }
-
-        if (nodes.find(rightNodeStr) != nodes.end()){
-            rightNode =  nodes[rightNodeStr]; 
-        } else {
-            nodes[rightNodeStr] = rightNode;
-        }
-
+        //cout << input << endl;
+        //string curNodeStr = input.substr(0,3);
+        //string leftNodeStr = input.substr(7,3);
+        //string rightNodeStr = input.substr(12,3);
+//
+        //curNode = new Node(curNodeStr);
+        //leftNode = new Node(leftNodeStr);
+        //rightNode = new Node(rightNodeStr);
+//
+        //if (nodes.find(curNodeStr) != nodes.end()){
+        //    curNode =  nodes[curNodeStr]; 
+        //} else {
+        //    nodes[curNodeStr] = curNode;
+        //}
+        //if (nodes.find(leftNodeStr) != nodes.end()){
+        //    leftNode =  nodes[leftNodeStr]; 
+        //} else {
+        //    nodes[leftNodeStr] = leftNode;
+        //}
+//
+        //if (nodes.find(rightNodeStr) != nodes.end()){
+        //    rightNode =  nodes[rightNodeStr]; 
+        //} else {
+        //    nodes[rightNodeStr] = rightNode;
+        //}
+        getNode(input.substr(0,3), *curNode);
+        getNode(input.substr(7,3), *leftNode);
+        getNode(input.substr(12,3), *rightNode);
         curNode->left = leftNode;
         curNode->right = rightNode;
 
@@ -153,14 +155,15 @@ int main(){
 
 }
 
-void getNode(const string nodeName, Node* node){
+void getNode(const string nodeName, Node& node){
     if (nodes.find(nodeName) != nodes.end()){
         cout << "Node in map" <<endl;
-        node =  nodes[nodeName]; 
+        node =  *nodes[nodeName]; 
         cout << "Node found" << endl;
     } else {
         cout << "Making new Node" <<endl;
-        node = new Node(nodeName);
-        nodes[nodeName] = node;
+        Node* newNode = new Node(nodeName);
+        node = *newNode;
+        nodes[nodeName] = newNode;
     }
 }
